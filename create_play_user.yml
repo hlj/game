@@ -1,0 +1,17 @@
+---
+
+- hosts: all
+  become: true
+  remote_user: jsdxadm
+
+  tasks:
+    - name: 创建play用户
+      user: name=play comment="操作用户" state=present uid=8000 password="$1$myplayer$8MTe69MImd69itRx1GL1V1"
+
+    - name: 加入suoder列表 
+      lineinfile: >
+        dest=/etc/sudoers
+        state=present 
+        regexp='^play ALL\=' 
+        line='play ALL=(ALL) ALL' 
+        validate='visudo -cf %s'
